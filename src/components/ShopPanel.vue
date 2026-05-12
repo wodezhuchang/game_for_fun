@@ -37,18 +37,22 @@ function getROI(level: number, price: number): number {
       <div
         v-for="item in showAllItems ? gameStore.shopItems : gameStore.shopItems.slice(0, 6)"
         :key="item.level"
-        :class="['shop-item', { 'affordable': canAfford(item.price), 'unaffordable': !canAfford(item.price) }]"
-        @click.stop="gameStore.buyFromShop(item.level)"
+        class="shop-item-wrapper"
       >
-        <div class="item-emoji">{{ item.emoji }}</div>
-        <div class="item-info">
-          <div class="item-name">{{ item.name }}</div>
-          <div class="item-price">💰 {{ item.price.toLocaleString() }}</div>
-          <div class="item-cps">⚡ {{ getCoinPerSecond(item.level) }}/秒</div>
-        </div>
-        <div class="item-roi">
-          <span class="roi-label">回本时间</span>
-          <span class="roi-value">{{ getROI(item.level, item.price) }}秒</span>
+        <div
+          :class="['shop-item', { 'affordable': canAfford(item.price), 'unaffordable': !canAfford(item.price) }]"
+          @click.stop="gameStore.buyFromShop(item.level)"
+        >
+          <div class="item-emoji">{{ item.emoji }}</div>
+          <div class="item-info">
+            <div class="item-name">{{ item.name }}</div>
+            <div class="item-price">💰 {{ item.price.toLocaleString() }}</div>
+            <div class="item-cps">⚡ {{ getCoinPerSecond(item.level) }}/秒</div>
+          </div>
+          <div class="item-roi">
+            <span class="roi-label">回本时间</span>
+            <span class="roi-value">{{ getROI(item.level, item.price) }}秒</span>
+          </div>
         </div>
       </div>
     </div>
@@ -111,7 +115,6 @@ function getROI(level: number, price: number): number {
 .shop-items {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   max-height: 400px;
   overflow-y: auto;
 }
@@ -130,16 +133,21 @@ function getROI(level: number, price: number): number {
   border-radius: 3px;
 }
 
+.shop-item-wrapper {
+  padding: 4px;
+}
+
 .shop-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px;
-  border-radius: 12px;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   position: relative;
   overflow: hidden;
+  touch-action: manipulation;
 }
 
 .shop-item::before {
@@ -154,31 +162,31 @@ function getROI(level: number, price: number): number {
 }
 
 .shop-item.affordable {
-  background: linear-gradient(135deg, rgba(17, 153, 142, 0.35) 0%, rgba(56, 239, 125, 0.25) 100%);
-  border: 1px solid rgba(56, 239, 125, 0.5);
+  background: rgba(17, 153, 142, 0.25);
+  border: 1px solid rgba(56, 239, 125, 0.4);
 }
 
 .shop-item.affordable:hover {
-  transform: translateX(6px);
-  background: linear-gradient(135deg, rgba(17, 153, 142, 0.45) 0%, rgba(56, 239, 125, 0.35) 100%);
-  box-shadow: 0 4px 20px rgba(56, 239, 125, 0.2);
+  background: rgba(17, 153, 142, 0.35);
+  border-color: rgba(56, 239, 125, 0.6);
+  box-shadow: 0 4px 16px rgba(56, 239, 125, 0.15);
 }
 
 .shop-item.unaffordable {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   opacity: 0.55;
 }
 
 .item-emoji {
-  font-size: 34px;
-  width: 52px;
-  height: 52px;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 8px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
@@ -189,29 +197,29 @@ function getROI(level: number, price: number): number {
 .item-name {
   color: white;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 13px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .item-price {
   color: #ffd700;
-  font-size: 14px;
-  margin-top: 4px;
+  font-size: 12px;
+  margin-top: 2px;
   font-weight: 600;
 }
 
 .item-cps {
   color: #38ef7d;
-  font-size: 12px;
-  margin-top: 2px;
+  font-size: 11px;
+  margin-top: 1px;
 }
 
 .item-roi {
   text-align: center;
-  padding: 8px 12px;
+  padding: 5px 8px;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  min-width: 75px;
+  border-radius: 8px;
+  min-width: 55px;
 }
 
 .roi-label {
