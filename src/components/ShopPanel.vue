@@ -27,7 +27,7 @@ function getROI(level: number, price: number): number {
       <h3>🏪 商店</h3>
       <button
         :class="['toggle-btn', { 'active': showAllItems }]"
-        @click="showAllItems = !showAllItems"
+        @click.stop="showAllItems = !showAllItems"
       >
         {{ showAllItems ? '收起' : '显示全部' }}
       </button>
@@ -38,7 +38,7 @@ function getROI(level: number, price: number): number {
         v-for="item in showAllItems ? gameStore.shopItems : gameStore.shopItems.slice(0, 6)"
         :key="item.level"
         :class="['shop-item', { 'affordable': canAfford(item.price), 'unaffordable': !canAfford(item.price) }]"
-        @click="gameStore.buyFromShop(item.level)"
+        @click.stop="gameStore.buyFromShop(item.level)"
       >
         <div class="item-emoji">{{ item.emoji }}</div>
         <div class="item-info">
@@ -61,11 +61,16 @@ function getROI(level: number, price: number): number {
 
 <style scoped>
 .shop-panel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.9) 0%, rgba(20, 20, 40, 0.95) 100%);
+  border-radius: 18px;
   padding: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .shop-header {
@@ -79,13 +84,14 @@ function getROI(level: number, price: number): number {
   color: white;
   font-size: 20px;
   margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .toggle-btn {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   color: white;
   font-size: 12px;
   cursor: pointer;
@@ -94,6 +100,7 @@ function getROI(level: number, price: number): number {
 
 .toggle-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .toggle-btn.active {
@@ -114,12 +121,12 @@ function getROI(level: number, price: number): number {
 }
 
 .shop-items::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
 
 .shop-items::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
@@ -127,37 +134,52 @@ function getROI(level: number, price: number): number {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 14px;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.shop-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .shop-item.affordable {
-  background: linear-gradient(135deg, rgba(17, 153, 142, 0.3) 0%, rgba(56, 239, 125, 0.2) 100%);
-  border: 1px solid rgba(56, 239, 125, 0.4);
+  background: linear-gradient(135deg, rgba(17, 153, 142, 0.35) 0%, rgba(56, 239, 125, 0.25) 100%);
+  border: 1px solid rgba(56, 239, 125, 0.5);
 }
 
 .shop-item.affordable:hover {
-  transform: translateX(4px);
-  background: linear-gradient(135deg, rgba(17, 153, 142, 0.4) 0%, rgba(56, 239, 125, 0.3) 100%);
+  transform: translateX(6px);
+  background: linear-gradient(135deg, rgba(17, 153, 142, 0.45) 0%, rgba(56, 239, 125, 0.35) 100%);
+  box-shadow: 0 4px 20px rgba(56, 239, 125, 0.2);
 }
 
 .shop-item.unaffordable {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
 .item-emoji {
-  font-size: 32px;
-  width: 48px;
-  height: 48px;
+  font-size: 34px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .item-info {
@@ -167,27 +189,29 @@ function getROI(level: number, price: number): number {
 .item-name {
   color: white;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .item-price {
   color: #ffd700;
-  font-size: 13px;
+  font-size: 14px;
   margin-top: 4px;
+  font-weight: 600;
 }
 
 .item-cps {
   color: #38ef7d;
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 2px;
 }
 
 .item-roi {
   text-align: center;
-  padding: 8px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  min-width: 70px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  min-width: 75px;
 }
 
 .roi-label {
@@ -205,10 +229,10 @@ function getROI(level: number, price: number): number {
 
 .warning-message {
   margin-top: 16px;
-  padding: 12px;
+  padding: 14px;
   background: rgba(255, 140, 0, 0.2);
   border: 1px solid rgba(255, 140, 0, 0.4);
-  border-radius: 8px;
+  border-radius: 10px;
   color: #ffa502;
   font-size: 13px;
   text-align: center;

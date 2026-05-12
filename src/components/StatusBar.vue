@@ -46,21 +46,42 @@ const gameStore = useChickenGameStore()
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .status-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  min-width: 140px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(30, 30, 50, 0.85) 0%, rgba(20, 20, 40, 0.9) 100%);
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  min-width: 150px;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .status-icon {
-  font-size: 24px;
+  font-size: 26px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .status-content {
@@ -74,24 +95,28 @@ const gameStore = useChickenGameStore()
 }
 
 .status-value {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: white;
 }
 
 .status-item.coins .status-value {
   color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .status-item.cps .status-value {
   color: #38ef7d;
+  text-shadow: 0 0 10px rgba(56, 239, 125, 0.3);
 }
 
 .status-item.total .status-value {
   color: #667eea;
+  text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
 }
 
 .status-item.highscore .status-value {
   color: #ffa502;
+  text-shadow: 0 0 10px rgba(255, 165, 2, 0.3);
 }
 </style>
